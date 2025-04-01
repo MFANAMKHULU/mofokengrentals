@@ -40,9 +40,6 @@ const Navbar: React.FC = () => {
           <NavLink to="/" className={({ isActive }) => `navbar-link ${isActive ? 'active' : ''}`}>
             Home
           </NavLink>
-          <NavLink to="/planning" className={({ isActive }) => `navbar-link ${isActive ? 'active' : ''}`}>
-            Planning
-          </NavLink>
           <NavLink to="/approach" className={({ isActive }) => `navbar-link ${isActive ? 'active' : ''}`}>
             Our Approach
           </NavLink>
