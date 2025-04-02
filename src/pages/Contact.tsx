@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import HeroSection from '@/components/HeroSection';
@@ -12,6 +11,9 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
+import { Facebook, Instagram, Twitter, Mail, Phone, MapPin, Clock, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -22,6 +24,25 @@ const formSchema = z.object({
 
 const Contact = () => {
   const { toast } = useToast();
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay()]);
+  const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
+  const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
+
+  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setPrevBtnEnabled(emblaApi.canScrollPrev());
+    setNextBtnEnabled(emblaApi.canScrollNext());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on('select', onSelect);
+  }, [emblaApi, onSelect]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -31,6 +52,29 @@ const Contact = () => {
       message: '',
     },
   });
+
+  const isBusinessOpen = () => {
+    const now = new Date();
+    const day = now.getDay();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+
+    // Convert current time to decimal hours (e.g., 14:30 becomes 14.5)
+    const currentTime = hour + minute / 60;
+
+    // Business hours in decimal format
+    const weekdayHours = { open: 8, close: 17 };
+    const saturdayHours = { open: 8, close: 15 };
+    const sundayHours = { open: 8, close: 13 };
+
+    if (day >= 1 && day <= 5) { // Monday to Friday
+      return currentTime >= weekdayHours.open && currentTime < weekdayHours.close;
+    } else if (day === 6) { // Saturday
+      return currentTime >= saturdayHours.open && currentTime < saturdayHours.close;
+    } else { // Sunday
+      return currentTime >= sundayHours.open && currentTime < sundayHours.close;
+    }
+  };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
@@ -48,6 +92,7 @@ const Contact = () => {
         backgroundImage="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
         title="Contact Us"
         description="Reach out to our team for inquiries, bookings, or custom solutions."
+        showConsultationButton={false}
       />
 
       <section className="py-20 bg-white">
@@ -56,7 +101,7 @@ const Contact = () => {
             <div>
               <h2 className="text-3xl md:text-4xl font-bold font-serif mb-6">Get in Touch</h2>
               <p className="text-gray-600 mb-8">
-                Whether you're planning a wedding, corporate event, or special celebration,
+                Whether you're planning a wedding, gathering, funeral, or special celebration,
                 our team is ready to assist you with premium rental solutions.
               </p>
 
@@ -69,7 +114,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-bold mb-1">Phone</h3>
-                    <p className="text-gray-600">+27 123 456 7890</p>
+                    <p className="text-gray-600">(+27) 73 326 0986</p>
                   </div>
                 </div>
 
@@ -82,7 +127,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-bold mb-1">Email</h3>
-                    <p className="text-gray-600">info@mofokengrentals.com</p>
+                    <p className="text-gray-600">katlehomofokeng179@gmail.com</p>
                   </div>
                 </div>
 
@@ -95,8 +140,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-bold mb-1">Location</h3>
-                    <p className="text-gray-600">123 Event Street</p>
-                    <p className="text-gray-600">Johannesburg, South Africa</p>
+                    <p className="text-gray-600">Standerton, South Africa</p>
                   </div>
                 </div>
 
@@ -109,9 +153,13 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-bold mb-1">Office Hours</h3>
-                    <p className="text-gray-600">Monday - Friday: 9am - 5pm</p>
-                    <p className="text-gray-600">Saturday: 10am - 2pm</p>
-                    <p className="text-gray-600">Sunday: Closed</p>
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className={`w-3 h-3 rounded-full ${isBusinessOpen() ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                      <span className="text-sm font-medium">{isBusinessOpen() ? 'Open Now' : 'Closed'}</span>
+                    </div>
+                    <p className="text-gray-600">Monday - Friday: 08:00 - 17:00</p>
+                    <p className="text-gray-600">Saturday: 08:00 - 15:00</p>
+                    <p className="text-gray-600">Sunday: 08:00 - 13:00</p>
                   </div>
                 </div>
               </div>
@@ -183,6 +231,101 @@ const Contact = () => {
         </div>
       </section>
 
+      {/* Map Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl font-bold font-serif mb-6 text-center">Visit Us</h2>
+          <div className="aspect-video w-full rounded-lg overflow-hidden shadow-lg">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3571.9029024429797!2d29.2348803!3d-26.9398707!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1eefb3c1c0c0c0c0%3A0x1eefb3c1c0c0c0c0!2s30%20Rooibok%20Cres%2C%20Standerton%2C%202430!5e0!3m2!1sen!2sza!4v1641234567890!5m2!1sen!2sza"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl font-bold font-serif mb-6 text-center">What Our Clients Say</h2>
+          <div className="relative">
+            <div className="overflow-hidden" ref={emblaRef}>
+              <div className="flex">
+                {[
+                  {
+                    name: "Sarah Johnson",
+                    role: "Wedding Client",
+                    text: "The team at Mofokeng Rentals was exceptional! They went above and beyond to make our wedding day perfect.",
+                    rating: 5
+                  },
+                  {
+                    name: "Michael Brown",
+                    role: "Event Planner",
+                    text: "Professional service and high-quality equipment. They're my go-to for all event rentals.",
+                    rating: 5
+                  },
+                  {
+                    name: "Lisa Smith",
+                    role: "Corporate Client",
+                    text: "Outstanding service and attention to detail. Highly recommended for any event needs.",
+                    rating: 5
+                  },
+                  {
+                    name: "David Wilson",
+                    role: "Wedding Client",
+                    text: "The quality of their equipment and the professionalism of their team made our wedding day truly special.",
+                    rating: 5
+                  },
+                  {
+                    name: "Emma Davis",
+                    role: "Event Organizer",
+                    text: "Their attention to detail and customer service is unmatched. A pleasure to work with!",
+                    rating: 5
+                  }
+                ].map((testimonial, index) => (
+                  <div key={index} className="flex-[0_0_100%] min-w-0 sm:flex-[0_0_50%] lg:flex-[0_0_33.33%] px-4">
+                    <Card className="border-none shadow-sm h-full">
+                      <CardContent className="p-6">
+                        <div className="flex mb-4">
+                          {[...Array(testimonial.rating)].map((_, i) => (
+                            <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                          ))}
+                        </div>
+                        <p className="text-gray-600 mb-4">{testimonial.text}</p>
+                        <div>
+                          <p className="font-bold">{testimonial.name}</p>
+                          <p className="text-sm text-gray-500">{testimonial.role}</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <button
+              className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={scrollPrev}
+              disabled={!prevBtnEnabled}
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <button
+              className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={scrollNext}
+              disabled={!nextBtnEnabled}
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
       <section className="py-20 bg-gray-100">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
@@ -202,10 +345,6 @@ const Contact = () => {
                 {
                   question: "Do you offer delivery and setup services?",
                   answer: "Yes, we provide delivery, setup, and collection services for all our rentals. Our team ensures everything is properly installed and arranged according to your specifications."
-                },
-                {
-                  question: "What is your cancellation policy?",
-                  answer: "Cancellations made 30+ days before your event receive a full refund minus a small administrative fee. Cancellations within 30 days are subject to a percentage fee based on proximity to the event date."
                 },
                 {
                   question: "Can I see the items before renting?",

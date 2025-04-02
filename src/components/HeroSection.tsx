@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
@@ -24,7 +23,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     <div 
       className="hero-section min-h-screen flex items-center justify-center relative"
-      style={{ backgroundImage: `url(${backgroundImage})` }}
+      style={{ 
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
     >
       <div className="hero-content text-center text-white max-w-4xl px-4 flex flex-col items-center z-10">
         {subtitle && (
@@ -32,7 +36,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             {subtitle}
           </p>
         )}
-        <h1 className="text-5xl md:text-6xl lg:text-8xl font-bold mb-6 font-serif animate-fade-in leading-tight">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 font-serif animate-fade-in leading-tight">
           {title}
         </h1>
         {description && (
@@ -42,8 +46,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({
         )}
         {showConsultationButton && (
           <div className="absolute bottom-10 right-10 z-20 animate-fade-in">
-            <Button asChild className="bg-[#e7c0c0] text-black hover:bg-[#d9acac] px-8 py-6 text-base rounded-full">
-              <Link to="/consultation">Consultation</Link>
+            <Button asChild className="bg-orange-500 text-white hover:bg-orange-600 px-8 py-6 text-base rounded-full">
+              <Link to="/consultation">Get Started</Link>
             </Button>
           </div>
         )}
