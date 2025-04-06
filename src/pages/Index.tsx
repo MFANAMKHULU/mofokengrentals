@@ -79,27 +79,38 @@ const Index = () => {
               {
                 title: "Event Furniture",
                 description: "Elegant tables, chairs, and accessories for any celebration.",
-                image: "https://images.unsplash.com/photo-1507504031003-b417219a0fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+                image: "images/homecards/chair.jpeg",
+                tab: "furniture"
               },
               {
                 title: "Tent Hire",
                 description: "High-quality, stylish tents for any celebration.",
-                image: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+                image: "images/homecards/tents.jpeg",
+                tab: "tents"
               },
               {
                 title: "Trailer Hire",
                 description: "Reliable trailers for hire, perfect for transporting goods.",
-                image: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80"
+                image: "images/homecards/trailers.jpg",
+                tab: "trailers"
               },
               {
                 title: "Extras",
                 description: "Essential extras: gas stoves, LED lights, and more..",
-                image: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80"
+                image: "images/homecards/extras.jpeg",
+                tab: "extras"
+              },
+              {
+                title: "Toilets",
+                description: "Flushable toilets or mobile toilets",
+                image: "images/homecards/toilets.jpg",
+                tab: "toilets"
               },
               {
                 title: "Equipment",
-                description: "Reliable  equipment: scaffolding, power tools, and generators",
-                image: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80"
+                description: "Reliable  equipment: scaffolding, power tools",
+                image: "images/homecards/equipment.jpeg",
+                tab: "equipment"
               }
             ].map((service, index) => (
               <motion.div
@@ -129,7 +140,7 @@ const Index = () => {
                     </motion.h3>
                     <p className="text-gray-600 mb-3 text-sm">{service.description}</p>
                     <Button asChild variant="outline" className="w-full text-sm py-1 hover:bg-orange-500 hover:text-white border-orange-500 text-orange-500">
-                      <Link to="/offerings">Learn More</Link>
+                      <Link to={`/offerings?tab=${service.tab}`}>Learn More</Link>
                     </Button>
                   </CardContent>
                 </Card>
