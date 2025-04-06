@@ -22,6 +22,13 @@ const formSchema = z.object({
   message: z.string().min(10, { message: 'Message must be at least 10 characters.' }),
 });
 
+// Add interface for testimonial type
+interface Testimonial {
+  name: string;
+  text: string;
+  rating: number;
+}
+
 const Contact = () => {
   const { toast } = useToast();
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay()]);
@@ -84,6 +91,34 @@ const Contact = () => {
     });
     form.reset();
   }
+
+  const testimonials: Testimonial[] = [
+    {
+      name: "Khutjisho shogole",
+      text: "The team at Mofokeng Rentals was exceptional! They went above and beyond to make my day perfect.",
+      rating: 5
+    },
+    {
+      name: "Thulani Nhlapho",
+      text: "Professional service and high-quality equipment. They're my go-to for all event rentals.",
+      rating: 4.5
+    },
+    {
+      name: "Nokwanda khumalo",
+      text: "Outstanding service and attention to detail. Highly recommended for any event needs.",
+      rating: 5
+    },
+    {
+      name: "Sihle Nhlapho",
+      text: "The quality of their equipment and the professionalism of their team made our event truly special.",
+      rating: 4.5
+    },
+    {
+      name: "Mabel Nyoni",
+      text: "Their attention to detail and customer service is unmatched. A pleasure to work with!",
+      rating: 5
+    }
+  ];
 
   return (
     <>
@@ -235,16 +270,18 @@ const Contact = () => {
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold font-serif mb-6 text-center">Visit Us</h2>
-          <div className="aspect-video w-full rounded-lg overflow-hidden shadow-lg">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3571.9029024429797!2d29.2348803!3d-26.9398707!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1eefb3c1c0c0c0c0%3A0x1eefb3c1c0c0c0c0!2s30%20Rooibok%20Cres%2C%20Standerton%2C%202430!5e0!3m2!1sen!2sza!4v1641234567890!5m2!1sen!2sza"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
+          <div className="max-w-2xl mx-auto">
+            <div className="aspect-[4/3] w-full rounded-lg overflow-hidden shadow-lg">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3571.9029024429797!2d29.2348803!3d-26.9398707!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1eefb3c1c0c0c0c0%3A0x1eefb3c1c0c0c0c0!2sStanderton%2C%20South%20Africa!5e0!3m2!1sen!2sza!4v1641234567890!5m2!1sen!2sza"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
           </div>
         </div>
       </section>
@@ -256,50 +293,21 @@ const Contact = () => {
           <div className="relative">
             <div className="overflow-hidden" ref={emblaRef}>
               <div className="flex">
-                {[
-                  {
-                    name: "Sarah Johnson",
-                    role: "Wedding Client",
-                    text: "The team at Mofokeng Rentals was exceptional! They went above and beyond to make our wedding day perfect.",
-                    rating: 5
-                  },
-                  {
-                    name: "Michael Brown",
-                    role: "Event Planner",
-                    text: "Professional service and high-quality equipment. They're my go-to for all event rentals.",
-                    rating: 5
-                  },
-                  {
-                    name: "Lisa Smith",
-                    role: "Corporate Client",
-                    text: "Outstanding service and attention to detail. Highly recommended for any event needs.",
-                    rating: 5
-                  },
-                  {
-                    name: "David Wilson",
-                    role: "Wedding Client",
-                    text: "The quality of their equipment and the professionalism of their team made our wedding day truly special.",
-                    rating: 5
-                  },
-                  {
-                    name: "Emma Davis",
-                    role: "Event Organizer",
-                    text: "Their attention to detail and customer service is unmatched. A pleasure to work with!",
-                    rating: 5
-                  }
-                ].map((testimonial, index) => (
+                {testimonials.map((testimonial, index) => (
                   <div key={index} className="flex-[0_0_100%] min-w-0 sm:flex-[0_0_50%] lg:flex-[0_0_33.33%] px-4">
                     <Card className="border-none shadow-sm h-full">
                       <CardContent className="p-6">
                         <div className="flex mb-4">
-                          {[...Array(testimonial.rating)].map((_, i) => (
+                          {[...Array(Math.floor(testimonial.rating))].map((_, i) => (
                             <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
                           ))}
+                          {testimonial.rating % 1 !== 0 && (
+                            <Star className="w-5 h-5 text-yellow-400 fill-current opacity-50" />
+                          )}
                         </div>
                         <p className="text-gray-600 mb-4">{testimonial.text}</p>
                         <div>
                           <p className="font-bold">{testimonial.name}</p>
-                          <p className="text-sm text-gray-500">{testimonial.role}</p>
                         </div>
                       </CardContent>
                     </Card>

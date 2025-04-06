@@ -389,9 +389,9 @@ const Offerings = () => {
               {filteredItems.length === 0 && (
                 <div className="text-center py-8">
                   <p className="text-gray-600">No items found matching your search.</p>
-                </div>
+                    </div>
               )}
-            </div>
+              </div>
           ) : (
             // Show tabs when not searching
             <Tabs defaultValue={defaultTab} className="max-w-4xl mx-auto">
@@ -406,29 +406,29 @@ const Offerings = () => {
 
               {Object.entries(itemsByCategory).map(([category, items]) => (
                 <TabsContent key={category} value={category}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {items.map((item, index) => (
-                      <Card key={index} className="overflow-hidden group">
-                        <div className="h-64 overflow-hidden">
-                          <img 
-                            src={item.image} 
-                            alt={item.title}
-                            className="w-full h-full object-contain bg-gray-100 transition-transform duration-300 group-hover:scale-105"
-                          />
-                        </div>
-                        <CardContent className="p-4">
-                          <h3 className="text-lg font-serif font-bold mb-2">{item.title}</h3>
-                          <p className="text-gray-600 mb-3 text-sm">{item.description}</p>
+                  <Card key={index} className="overflow-hidden group">
+                    <div className="h-64 overflow-hidden">
+                      <img 
+                        src={item.image} 
+                        alt={item.title}
+                        className="w-full h-full object-contain bg-gray-100 transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                    <CardContent className="p-4">
+                      <h3 className="text-lg font-serif font-bold mb-2">{item.title}</h3>
+                      <p className="text-gray-600 mb-3 text-sm">{item.description}</p>
                           <div className="flex justify-end items-center">
-                            <span className="text-orange-500 font-semibold">{item.price}</span>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </TabsContent>
+                        <span className="text-orange-500 font-semibold">{item.price}</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
               ))}
-            </Tabs>
+          </Tabs>
           )}
         </div>
       </section>

@@ -69,7 +69,7 @@ const Index = () => {
           </motion.div>
 
           <motion.div 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-6 max-w-[1920px] mx-auto"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -96,7 +96,7 @@ const Index = () => {
               },
               {
                 title: "Extras",
-                description: "Essential extras: gas stoves, LED lights, and more..",
+                description: "Essential extras: gas stoves, LED lights, and more.",
                 image: "images/homecards/extras.jpeg",
                 tab: "extras"
               },
@@ -108,7 +108,7 @@ const Index = () => {
               },
               {
                 title: "Equipment",
-                description: "Reliable  equipment: scaffolding, power tools",
+                description: "Reliable equipment: scaffolding, power tools",
                 image: "images/homecards/equipment.jpeg",
                 tab: "equipment"
               }
@@ -116,13 +116,11 @@ const Index = () => {
               <motion.div
                 key={index}
                 variants={itemVariants}
-                animate={floatAnimation}
-                style={{ animationDelay: `${index * 0.3}s` }}
-                whileHover={{ scale: 1.03 }}
+                whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.2 }}
               >
-                <Card className="overflow-hidden group h-full transform transition-all duration-300 hover:shadow-lg bg-white">
-                  <div className="h-40 overflow-hidden">
+                <Card className="overflow-hidden h-full bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
+                  <div className="h-48 overflow-hidden">
                     <motion.img 
                       src={service.image} 
                       alt={service.title} 
@@ -131,15 +129,16 @@ const Index = () => {
                       transition={{ duration: 0.3 }}
                     />
                   </div>
-                  <CardContent className="p-4">
-                    <motion.h3 
-                      className="text-lg font-serif font-bold mb-2"
-                      whileHover={{ color: "#f97316" }}
-                    >
+                  <CardContent className="p-6">
+                    <h3 className="text-xl font-bold mb-3 text-gray-900">
                       {service.title}
-                    </motion.h3>
-                    <p className="text-gray-600 mb-3 text-sm">{service.description}</p>
-                    <Button asChild variant="outline" className="w-full text-sm py-1 hover:bg-orange-500 hover:text-white border-orange-500 text-orange-500">
+                    </h3>
+                    <p className="text-gray-600 mb-4">{service.description}</p>
+                    <Button 
+                      asChild 
+                      variant="outline" 
+                      className="w-full bg-transparent hover:bg-orange-500 text-orange-500 hover:text-white border-2 border-orange-500 font-semibold rounded-md transition-colors duration-300"
+                    >
                       <Link to={`/offerings?tab=${service.tab}`}>Learn More</Link>
                     </Button>
                   </CardContent>
