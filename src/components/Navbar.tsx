@@ -48,6 +48,7 @@ const Navbar: React.FC = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
+          {/* Logo */}
           <Link to="/" className="flex items-center">
             <div className="flex flex-col">
               <span className={`text-2xl md:text-3xl font-bold ${isScrolled ? 'text-orange-500' : 'text-white'}`}>
@@ -59,73 +60,74 @@ const Navbar: React.FC = () => {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
-            <NavLink 
-              to="/" 
-              className={({ isActive }) => `
-                px-4 py-2 rounded-full transition-all duration-300
-                ${isScrolled 
-                  ? `${isActive ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-100'}`
-                  : `${isActive ? 'bg-white/20 text-white' : 'text-white hover:bg-white/10'}`
-                }
-              `}
-            >
-              Home
-            </NavLink>
-            <NavLink 
-              to="/approach" 
-              className={({ isActive }) => `
-                px-4 py-2 rounded-full transition-all duration-300
-                ${isScrolled 
-                  ? `${isActive ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-100'}`
-                  : `${isActive ? 'bg-white/20 text-white' : 'text-white hover:bg-white/10'}`
-                }
-              `}
-            >
-              Our Approach
-            </NavLink>
-            <NavLink 
-              to="/offerings" 
-              className={({ isActive }) => `
-                px-4 py-2 rounded-full transition-all duration-300
-                ${isScrolled 
-                  ? `${isActive ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-100'}`
-                  : `${isActive ? 'bg-white/20 text-white' : 'text-white hover:bg-white/10'}`
-                }
-              `}
-            >
-              Offerings
-            </NavLink>
-            <NavLink 
-              to="/contact" 
-              className={({ isActive }) => `
-                px-4 py-2 rounded-full transition-all duration-300
-                ${isScrolled 
-                  ? `${isActive ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-100'}`
-                  : `${isActive ? 'bg-white/20 text-white' : 'text-white hover:bg-white/10'}`
-                }
-              `}
-            >
-              Contact
-            </NavLink>
-          </nav>
-
-          {/* Desktop Consultation Button */}
-          <div className="hidden md:block">
-            <Button 
-              asChild 
-              className={`
-                rounded-full transition-all duration-300
-                ${isScrolled 
-                  ? 'bg-orange-500 text-white hover:bg-orange-600' 
-                  : 'bg-white text-orange-500 hover:bg-white/90'
-                }
-              `}
-            >
-              <Link to="/consultation">Consultation</Link>
-            </Button>
+          {/* Desktop Navigation - Centered */}
+          <div className="hidden md:flex flex-1 justify-center">
+            <nav className="flex items-center space-x-1">
+              <NavLink 
+                to="/" 
+                className={({ isActive }) => `
+                  px-4 py-2 rounded-full transition-all duration-300
+                  ${isScrolled 
+                    ? `${isActive ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-500 hover:text-white'}`
+                    : `${isActive ? 'bg-white/20 text-white' : 'text-white hover:bg-orange-500 hover:text-white'}`
+                  }
+                `}
+              >
+                Home
+              </NavLink>
+              <NavLink 
+                to="/approach" 
+                className={({ isActive }) => `
+                  px-4 py-2 rounded-full transition-all duration-300
+                  ${isScrolled 
+                    ? `${isActive ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-500 hover:text-white'}`
+                    : `${isActive ? 'bg-white/20 text-white' : 'text-white hover:bg-orange-500 hover:text-white'}`
+                  }
+                `}
+              >
+                Our Approach
+              </NavLink>
+              <NavLink 
+                to="/offerings" 
+                className={({ isActive }) => `
+                  px-4 py-2 rounded-full transition-all duration-300
+                  ${isScrolled 
+                    ? `${isActive ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-500 hover:text-white'}`
+                    : `${isActive ? 'bg-white/20 text-white' : 'text-white hover:bg-orange-500 hover:text-white'}`
+                  }
+                `}
+              >
+                Offerings
+              </NavLink>
+              <NavLink 
+                to="/contact" 
+                className={({ isActive }) => `
+                  px-4 py-2 rounded-full transition-all duration-300
+                  ${isScrolled 
+                    ? `${isActive ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-500 hover:text-white'}`
+                    : `${isActive ? 'bg-white/20 text-white' : 'text-white hover:bg-orange-500 hover:text-white'}`
+                  }
+                `}
+              >
+                Contact
+              </NavLink>
+              <NavLink 
+                to="/consultation" 
+                className={({ isActive }) => `
+                  px-4 py-2 rounded-full transition-all duration-300
+                  ${isScrolled 
+                    ? `${isActive ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-500 hover:text-white'}`
+                    : `${isActive ? 'bg-white/20 text-white' : 'text-white hover:bg-orange-500 hover:text-white'}`
+                  }
+                `}
+              >
+                Consultation
+              </NavLink>
+            </nav>
           </div>
+
+          {/* Empty div to maintain spacing */}
+          <div className="hidden md:block w-[100px]"></div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">

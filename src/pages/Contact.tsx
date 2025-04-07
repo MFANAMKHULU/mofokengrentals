@@ -104,7 +104,7 @@ const Contact = () => {
       rating: 4.5
     },
     {
-      name: "Nokwanda khumalo",
+      name: "Refiloe Mofokeng",
       text: "Outstanding service and attention to detail. Highly recommended for any event needs.",
       rating: 5
     },

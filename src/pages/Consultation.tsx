@@ -73,10 +73,10 @@ const Consultation = () => {
     <>
       <Navbar />
       <HeroSection
-        backgroundImage="https://images.unsplash.com/photo-1530023367847-a683933f4172?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80"
+        backgroundImage="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
         title="Request a Consultation"
         description="Tell us about your event, and our experts will create a personalized rental plan."
-        showConsultationButton={false}
+        showScrollIndicator={true}
       />
 
       <section className="py-20 bg-white">

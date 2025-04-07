@@ -1,11 +1,12 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import HeroSection from '@/components/HeroSection';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import { ShoppingCart } from 'lucide-react';
 
 // Define types for our items
 interface RentalItem {
@@ -20,6 +21,16 @@ const Offerings = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const defaultTab = searchParams.get('tab') || 'furniture';
   const [searchQuery, setSearchQuery] = useState('');
+  const [orderItems, setOrderItems] = useState<RentalItem[]>([]);
+  const navigate = useNavigate();
+
+  // Load order items from localStorage on component mount
+  useEffect(() => {
+    const savedItems = localStorage.getItem('orderItems');
+    if (savedItems) {
+      setOrderItems(JSON.parse(savedItems));
+    }
+  }, []);
 
   // Define all items with their categories
   const allItems: RentalItem[] = [
@@ -63,14 +74,14 @@ const Offerings = () => {
       title: "Rectangle Table",
       description: "Versatile rectangular tables for various seating arrangements seats 6 people.",
       image: "images/furniture/recttable.jpg",
-      price: "R30 per chair per day",
+      price: "R30 per table per day",
       category: "furniture"
     },
     {
       title: "Gold Chair",
       description: "Elegant gold-finished chairs for a luxurious touch includes cushion .",
       image: "images/furniture/goldchair.jpg",
-      price: "R35 per table per day",
+      price: "R35 per chair per day",
       category: "furniture"
     },
     {
@@ -316,13 +327,27 @@ const Offerings = () => {
     setSearchQuery(e.target.value);
   };
 
+  // Function to add item to order
+  const addToOrder = (item: RentalItem) => {
+    const newOrderItems = [...orderItems, item];
+    setOrderItems(newOrderItems);
+    localStorage.setItem('orderItems', JSON.stringify(newOrderItems));
+  };
+
+  // Function to navigate to order display
+  const goToOrderDisplay = () => {
+    console.log('Navigating to order display...');
+    navigate('/order-display');
+  };
+
   return (
     <>
       <Navbar />
       <HeroSection
-        backgroundImage="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80"
+        backgroundImage="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
         title="Our Offerings"
-        description="Discover our premium selection of event rentals designed to transform your vision into reality."
+        description="Browse our extensive collection of premium event rentals and equipment."
+        showScrollIndicator={true}
       />
 
       {/* Search Section */}
@@ -379,8 +404,14 @@ const Offerings = () => {
                         </span>
                       </div>
                       <p className="text-gray-600 mb-3 text-sm">{item.description}</p>
-                      <div className="flex justify-end items-center">
+                      <div className="flex justify-between items-center">
                         <span className="text-orange-500 font-semibold">{item.price}</span>
+                        <Button 
+                          className="bg-orange-500 text-white hover:bg-orange-600"
+                          onClick={() => addToOrder(item)}
+                        >
+                          Add to Order
+                        </Button>
                       </div>
                     </CardContent>
                   </Card>
@@ -419,8 +450,14 @@ const Offerings = () => {
                     <CardContent className="p-4">
                       <h3 className="text-lg font-serif font-bold mb-2">{item.title}</h3>
                       <p className="text-gray-600 mb-3 text-sm">{item.description}</p>
-                          <div className="flex justify-end items-center">
+                      <div className="flex justify-between items-center">
                         <span className="text-orange-500 font-semibold">{item.price}</span>
+                        <Button 
+                          className="bg-orange-500 text-white hover:bg-orange-600"
+                          onClick={() => addToOrder(item)}
+                        >
+                          Add to Order
+                        </Button>
                       </div>
                     </CardContent>
                   </Card>
@@ -433,72 +470,20 @@ const Offerings = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-gray-100">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold font-serif mb-6">Packages & Themes</h2>
-            <p className="text-gray-600">
-              Explore our curated collections designed to simplify your planning process while ensuring a cohesive look.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Combo 1",
-                description: "Free-spirited designs with eclectic touches for a relaxed yet stylish celebration.",
-                image: "https://images.unsplash.com/photo-1569948840386-254febeee3a3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-                price: "From R9,600"
-              },
-              {
-                title: "Combo 2",
-                description: "Opulent textures, rich colors, and dramatic lighting for a high-end experience.",
-                image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-                price: "From R15,500"
-              },
-              {
-                title: "Combo 3",
-                description: "Fresh, vibrant, and nature-inspired elements for outdoor celebrations.",
-                image: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-                price: "From R11,300"
-              }
-            ].map((theme, index) => (
-              <Card key={index} className="overflow-hidden">
-                <div className="h-64 overflow-hidden">
-                  <img 
-                    src={theme.image} 
-                    alt={theme.title} 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <CardContent className="p-6">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-xl font-serif font-bold">{theme.title}</h3>
-                    <span className="text-sm font-semibold bg-black text-white px-3 py-1 rounded-full">{theme.price}</span>
-                  </div>
-                  <p className="text-gray-600 mb-4">{theme.description}</p>
-                  <Button asChild className="w-full">
-                    <Link to="/consultation">View Details</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 bg-gray-900 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold font-serif mb-6">Custom Solutions Available</h2>
-          <p className="text-gray-300 max-w-2xl mx-auto mb-8">
-            Don't see exactly what you're looking for? We specialize in creating custom rental packages
-            tailored to your specific vision and requirements.
-          </p>
-          <Button asChild className="bg-white text-black hover:bg-gray-200 px-8 py-6 text-base">
-            <Link to="/consultation">Request a Custom Quote</Link>
-          </Button>
-        </div>
-      </section>
+      {/* Floating Order Button */}
+      <div className="fixed bottom-6 right-6">
+        <Button
+          className="rounded-full h-14 w-14 bg-orange-500 text-white hover:bg-orange-600 shadow-lg flex items-center justify-center"
+          onClick={goToOrderDisplay}
+        >
+          <ShoppingCart className="h-6 w-6" />
+          {orderItems.length > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs">
+              {orderItems.length}
+            </span>
+          )}
+        </Button>
+      </div>
 
       <Footer />
     </>

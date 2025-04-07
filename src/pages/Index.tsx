@@ -47,10 +47,10 @@ const Index = () => {
     <>
       <Navbar />
       <HeroSection
-        backgroundImage={heroImage}
-        subtitle="Premium Event & Equipment Rentals"
-        title="Elevate Your Events"
-        description="Experience the elegance of our premium stretch tents and event equipment, perfect for any occasion."
+        backgroundImage="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
+        title="Premium Event Rentals"
+        description="Transform your events with our exceptional rental equipment and services."
+        showScrollIndicator={true}
       />
 
       <section className="py-20 bg-white">
@@ -124,7 +124,7 @@ const Index = () => {
                     <motion.img 
                       src={service.image} 
                       alt={service.title} 
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                       whileHover={{ scale: 1.05 }}
                       transition={{ duration: 0.3 }}
                     />

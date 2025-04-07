@@ -1,6 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from './ui/button';
 import { ChevronDown } from 'lucide-react';
 
 interface HeroSectionProps {
@@ -8,8 +6,8 @@ interface HeroSectionProps {
   subtitle?: string;
   title: string;
   description?: string;
-  showConsultationButton?: boolean;
   showScrollIndicator?: boolean;
+  showConsultationButton?: boolean;
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({
@@ -17,8 +15,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   subtitle,
   title,
   description,
-  showConsultationButton = true,
   showScrollIndicator = true,
+  showConsultationButton = false,
 }) => {
   return (
     <div 
@@ -43,13 +41,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           <p className="text-lg md:text-xl max-w-2xl mx-auto mb-12 animate-fade-in">
             {description}
           </p>
-        )}
-        {showConsultationButton && (
-          <div className="absolute bottom-10 right-10 z-20 animate-fade-in">
-            <Button asChild className="bg-orange-500 text-white hover:bg-orange-600 px-8 py-6 text-base rounded-full">
-              <Link to="/consultation">Get Started</Link>
-            </Button>
-          </div>
         )}
         {showScrollIndicator && (
           <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce-slow z-20">

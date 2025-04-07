@@ -1,7 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Footer: React.FC = () => {
+  const navigate = useNavigate();
+
+  const navigateToTab = (tab: string) => {
+    navigate(`/offerings?tab=${tab}`);
+  };
+
   return (
     <footer className="bg-orange-50 text-gray-600">
       <div className="container mx-auto px-4 py-8">
@@ -41,12 +47,54 @@ const Footer: React.FC = () => {
           <div className="md:col-span-1 lg:col-span-1">
             <h4 className="text-lg font-semibold mb-3 text-orange-500">Services</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-orange-500">Event Furniture</a></li>
-              <li><a href="#" className="hover:text-orange-500">Tent Hire</a></li>
-              <li><a href="#" className="hover:text-orange-500">Trailer Hire</a></li>
-              <li><a href="#" className="hover:text-orange-500">Equipment</a></li>
-              <li><a href="#" className="hover:text-orange-500">Toilets</a></li>
-              <li><a href="#" className="hover:text-orange-500">Extras</a></li>
+              <li>
+                <button 
+                  onClick={() => navigateToTab('furniture')} 
+                  className="hover:text-orange-500"
+                >
+                  Event Furniture
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => navigateToTab('tents')} 
+                  className="hover:text-orange-500"
+                >
+                  Tent Hire
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => navigateToTab('trailers')} 
+                  className="hover:text-orange-500"
+                >
+                  Trailer Hire
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => navigateToTab('equipment')} 
+                  className="hover:text-orange-500"
+                >
+                  Equipment
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => navigateToTab('toilets')} 
+                  className="hover:text-orange-500"
+                >
+                  Toilets
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => navigateToTab('extras')} 
+                  className="hover:text-orange-500"
+                >
+                  Extras
+                </button>
+              </li>
             </ul>
           </div>
           
