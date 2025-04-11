@@ -20,7 +20,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
 }) => {
   return (
     <div 
-      className="hero-section min-h-screen flex items-center justify-center relative"
+      className="hero-section h-[90vh] flex items-center justify-center relative z-0"
       style={{ 
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${backgroundImage})`,
         backgroundSize: 'cover',
@@ -43,7 +43,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           </p>
         )}
         {showScrollIndicator && (
-          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce-slow z-20">
+          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce-slow z-10">
             <ChevronDown className="h-8 w-8 text-white" />
           </div>
         )}

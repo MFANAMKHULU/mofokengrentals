@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import HeroSection from '@/components/HeroSection';
@@ -34,6 +35,7 @@ const Contact = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay()]);
   const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
   const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
@@ -60,36 +62,90 @@ const Contact = () => {
     },
   });
 
-  const isBusinessOpen = () => {
+  const getBusinessStatus = (): { status: string; nextOpen?: string } => {
     const now = new Date();
     const day = now.getDay();
     const hour = now.getHours();
-    const minute = now.getMinutes();
+    const minutes = now.getMinutes();
+    const currentTime = hour + minutes / 60;
 
-    // Convert current time to decimal hours (e.g., 14:30 becomes 14.5)
-    const currentTime = hour + minute / 60;
+    const hours = {
+      weekday: { open: 8, close: 17 },
+      saturday: { open: 8, close: 15 },
+      sunday: { open: 8, close: 13 }
+    };
 
-    // Business hours in decimal format
-    const weekdayHours = { open: 8, close: 17 };
-    const saturdayHours = { open: 8, close: 15 };
-    const sundayHours = { open: 8, close: 13 };
+    const getNextOpeningTime = () => {
+      const tomorrow = new Date(now);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const tomorrowDay = tomorrow.getDay();
 
-    if (day >= 1 && day <= 5) { // Monday to Friday
-      return currentTime >= weekdayHours.open && currentTime < weekdayHours.close;
-    } else if (day === 6) { // Saturday
-      return currentTime >= saturdayHours.open && currentTime < saturdayHours.close;
-    } else { // Sunday
-      return currentTime >= sundayHours.open && currentTime < sundayHours.close;
+      let openingTime: string;
+      if (tomorrowDay >= 1 && tomorrowDay <= 5) {
+        openingTime = '08:00';
+      } else if (tomorrowDay === 6) {
+        openingTime = '08:00';
+      } else {
+        openingTime = '08:00';
+      }
+
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      return `${days[tomorrowDay]} at ${openingTime}`;
+    };
+
+    // Check current status
+    let currentHours;
+    if (day >= 1 && day <= 5) {
+      currentHours = hours.weekday;
+    } else if (day === 6) {
+      currentHours = hours.saturday;
+    } else {
+      currentHours = hours.sunday;
     }
+
+    // Opening soon (within 1 hour of opening)
+    if (currentTime < currentHours.open && currentTime >= currentHours.open - 1) {
+      return { status: 'Opening soon' };
+    }
+    
+    // Closing soon (within 1 hour of closing)
+    if (currentTime < currentHours.close && currentTime >= currentHours.close - 1) {
+      return { status: 'Closing soon' };
+    }
+    
+    // Currently open
+    if (currentTime >= currentHours.open && currentTime < currentHours.close) {
+      return { status: 'Open' };
+    }
+    
+    // Closed
+    return { 
+      status: 'Closed',
+      nextOpen: getNextOpeningTime()
+    };
   };
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    toast({
-      title: "Message Sent!",
-      description: "Thank you for contacting us. We'll be in touch soon.",
-    });
-    form.reset();
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSubmitting(true);
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log(values);
+      toast({
+        title: "Message Sent!",
+        description: "Thank you for contacting us. We'll be in touch soon.",
+        variant: "default",
+      });
+      form.reset();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "There was a problem sending your message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   const testimonials: Testimonial[] = [
@@ -122,6 +178,15 @@ const Contact = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Contact Us - Mofokeng Rentals</title>
+        <meta name="description" content="Get in touch with Mofokeng Rentals for all your event rental needs. We offer premium rental solutions for weddings, gatherings, funerals, and special celebrations." />
+        <meta name="keywords" content="event rentals, wedding rentals, party rentals, Standerton, South Africa, Mofokeng Rentals" />
+        <meta property="og:title" content="Contact Mofokeng Rentals" />
+        <meta property="og:description" content="Premium event rental solutions in Standerton, South Africa. Contact us for weddings, gatherings, and special celebrations." />
+        <meta property="og:type" content="website" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Helmet>
       <Navbar />
       <HeroSection
         backgroundImage="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
@@ -188,10 +253,25 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-bold mb-1">Office Hours</h3>
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className={`w-3 h-3 rounded-full ${isBusinessOpen() ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                      <span className="text-sm font-medium">{isBusinessOpen() ? 'Open Now' : 'Closed'}</span>
-                    </div>
+                    {(() => {
+                      const status = getBusinessStatus();
+                      const statusColor = status.status === 'Open' ? 'bg-green-500' 
+                        : status.status === 'Closing soon' ? 'bg-yellow-500'
+                        : status.status === 'Opening soon' ? 'bg-blue-500'
+                        : 'bg-red-500';
+                      
+                      return (
+                        <>
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className={`w-3 h-3 rounded-full ${statusColor}`}></div>
+                            <span className="text-sm font-medium">
+                              {status.status}
+                              {status.nextOpen && ` - Opens ${status.nextOpen}`}
+                            </span>
+                          </div>
+                        </>
+                      );
+                    })()}
                     <p className="text-gray-600">Monday - Friday: 08:00 - 17:00</p>
                     <p className="text-gray-600">Saturday: 08:00 - 15:00</p>
                     <p className="text-gray-600">Sunday: 08:00 - 13:00</p>
@@ -257,7 +337,23 @@ const Contact = () => {
                         </FormItem>
                       )}
                     />
-                    <Button type="submit" className="w-full">Send Message</Button>
+                    <Button 
+                      type="submit" 
+                      className="w-full" 
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Sending...
+                        </>
+                      ) : (
+                        'Send Message'
+                      )}
+                    </Button>
                   </form>
                 </Form>
               </CardContent>
